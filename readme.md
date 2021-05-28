@@ -743,27 +743,27 @@ void main()
 {
 	uint8_t rx_Valid;
 	uint32_t invalid_cnt = 0;
-    uint8_t bfr[SX1231_PayloadLength];
-    
-    SPIx_Init();  //初始化无线模块之前应当初始化SPI接口
-    SX1231_Init_Secondary();  //SX1231从机初始化
-    
-    while (!SX1231_IsActiveFlag_ModeReady(&SX1231_Secondary))  //等待SX1231就绪
-    {
+	uint8_t bfr[SX1231_PayloadLength];
+
+	SPIx_Init();  //初始化无线模块之前应当初始化SPI接口
+	SX1231_Init_Secondary();  //SX1231从机初始化
+
+	while (!SX1231_IsActiveFlag_ModeReady(&SX1231_Secondary))  //等待SX1231就绪
+	{
 		printf("wait");
-    }
+	}
     
-    while(1)  //主循环
-    {
-        rx_Valid = 0;  //先将接受有效标志置0
+	while(1)  //主循环
+	{
+		rx_Valid = 0;  //先将接受有效标志置0
 		if(SX1231_Secondary_ReceivePacket(bfr))  //接收有效
 			if(bfr[0] == 0x23 && bfr[1] == 0x33)  //此处为自定义的数据包前缀，非必须
 			{
-                rx_Valid = 1;  //接收有效标注置1
+				rx_Valid = 1;  //接收有效标注置1
 				invalid_cnt = 0;  //无效接收次数清零
-                //数据有效，此处进行接收到数据的操作
-            }
-        
+				//数据有效，此处进行接收到数据的操作
+	    		}
+
 		if(! rx_Valid)  //当一次轮询的接收无效时
 		{
 			invalid_cnt++;   //无效次数增加
@@ -773,8 +773,8 @@ void main()
 				//此处进行长时间接收无效的操作
 			}
 		}
-        	
-    }
+
+	}
 }
 ```
 
@@ -787,21 +787,21 @@ void main()
 
 void main()
 {
-    uint8_t bfr[SX1231_PayloadLength];
-    
-    SPIx_Init();  //初始化无线模块之前应当初始化SPI接口
-    SX1231_Init_Primary();  //SX1231主机初始化
-    
-    while (!SX1231_IsActiveFlag_ModeReady(&SX1231_Primary))  //等待SX1231就绪
-    {
+	uint8_t bfr[SX1231_PayloadLength];
+
+	SPIx_Init();  //初始化无线模块之前应当初始化SPI接口
+	SX1231_Init_Primary();  //SX1231主机初始化
+
+	while (!SX1231_IsActiveFlag_ModeReady(&SX1231_Primary))  //等待SX1231就绪
+	{
 		printf("wait");
-    }
-    
-    while(1)  //主循环
-    {
-        //应先将要发送的数据写入bfr中
-        SX1231_Primary_TransmitPacket(bfr);  //发送数据
-    }
+	}
+
+	while(1)  //主循环
+	{
+		//应先将要发送的数据写入bfr中
+		SX1231_Primary_TransmitPacket(bfr);  //发送数据
+	}
 }
 ```
 
